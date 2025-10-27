@@ -1,67 +1,134 @@
-
 <%- include('Partials/header.ejs') %>
 
-    <!-- content -->
-    <main class="py-5">
-      <div class="container">
-        <div class="row justify-content-md-center">
-          <div class="col-md-8">
-            <div class="card">
-              <div class="card-header card-title">
-                <strong>Contact Details</strong>
-              </div>           
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group row">
-                      <label for="first_name" class="col-md-3 col-form-label">First Name</label>
-                      <div class="col-md-9">
-                        <p class="form-control-plaintext text-muted"><%- contact.first_name %></p>
-                      </div>
-                    </div>
+<style>
+  body {
+    background: radial-gradient(circle at top left, #1b1b1b, #0f172a, #0a0a0a);
+    font-family: 'Poppins', sans-serif;
+    color: #f5f5f5;
+  }
 
-                    <div class="form-group row">
-                      <label for="last_name" class="col-md-3 col-form-label">Last Name</label>
-                      <div class="col-md-9">
-                        <p class="form-control-plaintext text-muted"><%- contact.last_name %></p>
-                      </div>
-                    </div>
+  .profile-card {
+    background: rgba(20, 20, 20, 0.85);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.1);
+    backdrop-filter: blur(12px);
+    transition: all 0.4s ease;
+  }
 
-                    <div class="form-group row">
-                      <label for="city" class="col-md-3 col-form-label">City</label>
-                      <div class="col-md-9">
-                        <p class="form-control-plaintext text-muted"><%- contact.city %></p>
-                      </div>
-                    </div>
+  .profile-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 55px rgba(212, 175, 55, 0.25);
+  }
 
-                    <div class="form-group row">
-                      <label for="phone" class="col-md-3 col-form-label">Phone</label>
-                      <div class="col-md-9">
-                        <p class="form-control-plaintext text-muted"><%- contact.phone %></p>
-                      </div>
-                    </div>
+  .avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid rgba(212, 175, 55, 0.6);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+    margin-bottom: 1rem;
+    object-fit: cover;
+  }
 
-                    <div class="form-group row">
-                      <label for="name" class="col-md-3 col-form-label">Address</label>
-                      <div class="col-md-9">
-                        <p class="form-control-plaintext text-muted"><%- contact.address %></p>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="form-group row mb-0">
-                      <div class="col-md-9 offset-md-3">
-                          <a href="/update_contact/<%= contact._id%>" class="btn btn-info">Edit</a>
-                          <a href="/delete_contact/:id" class="btn btn-outline-danger">Delete</a>
-                          <a href="/" class="btn btn-outline-secondary">Cancel</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+  .contact-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #d4af37, #f7ce68);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .contact-info {
+    margin-top: 1.5rem;
+  }
+
+  .contact-info p {
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
+    color: #e8e8e8;
+  }
+
+  .contact-info i {
+    color: #d4af37;
+    width: 25px;
+  }
+
+  .btn {
+    border-radius: 50px;
+    padding: 10px 24px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-gold {
+    border: 1px solid rgba(212, 175, 55, 0.6);
+    color: #d4af37;
+    background: transparent;
+  }
+
+  .btn-outline-gold:hover {
+    background: linear-gradient(90deg, #d4af37, #f7ce68);
+    color: #1a1a1a;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  }
+
+  .btn-glow {
+    background: linear-gradient(90deg, #d4af37, #f7ce68);
+    border: none;
+    color: #1a1a1a;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+  }
+
+  .btn-glow:hover {
+    box-shadow: 0 0 35px rgba(212, 175, 55, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .divider {
+    height: 1px;
+    background: rgba(212, 175, 55, 0.2);
+    margin: 1.5rem 0;
+  }
+
+  .fade-in {
+    animation: fadeIn 1.2s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<main class="py-5 fade-in">
+  <div class="container d-flex justify-content-center align-items-center min-vh-70">
+    <div class="profile-card text-center">
+      <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=<%= contact.first_name %>" 
+           alt="Avatar" class="avatar">
+      <h2 class="contact-name"><%= contact.first_name %> <%= contact.last_name %></h2>
+
+      <div class="divider"></div>
+
+      <div class="contact-info text-start mx-auto" style="max-width: 400px;">
+        <p><i class="fa-solid fa-city me-2"></i> <strong>City:</strong> <%= contact.city %></p>
+        <p><i class="fa-solid fa-phone me-2"></i> <strong>Phone:</strong> <%= contact.phone %></p>
+        <p><i class="fa-solid fa-location-dot me-2"></i> <strong>Address:</strong> <%= contact.address || '—' %></p>
       </div>
-    </main>
 
-    <%- include('Partials/header.ejs') %>
+      <div class="divider"></div>
+
+      <div class="d-flex justify-content-center gap-3 mt-3">
+        <a href="/contacts/edit/<%= contact._id %>" class="btn btn-glow">
+          <i class="fa-solid fa-pen me-1"></i> Edit
+        </a>
+        <a href="/contacts" class="btn btn-outline-gold">
+          <i class="fa-solid fa-arrow-left me-1"></i> Back
+        </a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('Partials/footer.ejs') %>

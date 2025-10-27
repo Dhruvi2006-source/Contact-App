@@ -1,70 +1,169 @@
 <%- include('Partials/header.ejs') %>
 
+<style>
+  body {
+    background: radial-gradient(circle at top right, #1a1a1a, #0d1b2a, #000);
+    font-family: 'Poppins', sans-serif;
+    color: #f5f5f5;
+    position: relative;
+    overflow-x: hidden;
+  }
 
-    <!-- content -->
-    <main class="py-5">
-      <div class="container">
-        <div class="row justify-content-md-center">
-          <div class="col-md-8">
-            <div class="card">
-              <div class="card-header card-title">
-                <strong>Add New Contact</strong>
-              </div>           
-              <div class="card-body">
-                <form action="/add_contact" method="post">
+  /* Subtle watermark / emblem effect */
+  body::before {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    width: 500px;
+    height: 500px;
+    background: url('https://cdn-icons-png.flaticon.com/512/616/616408.png') no-repeat center/contain;
+    opacity: 0.03;
+    transform: translateX(-50%);
+    z-index: 0;
+  }
 
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group row">
-                        <label for="first_name" class="col-md-3 col-form-label">First Name</label>
-                        <div class="col-md-9">
-                          <input type="text" name="first_name" id="first_name" class="form-control">
-                        </div>
-                      </div>
-  
-                      <div class="form-group row">
-                        <label for="last_name" class="col-md-3 col-form-label">Last Name</label>
-                        <div class="col-md-9">
-                          <input type="text" name="last_name" id="last_name" class="form-control">
-                        </div>
-                      </div>
-  
-                      <div class="form-group row">
-                        <label for="city" class="col-md-3 col-form-label">City</label>
-                        <div class="col-md-9">
-                          <input type="text" name="city" id="email" class="form-control">
-                        </div>
-                      </div>
-  
-                      <div class="form-group row">
-                        <label for="phone" class="col-md-3 col-form-label">Phone</label>
-                        <div class="col-md-9">
-                          <input type="text" name="phone" id="phone" class="form-control">
-                        </div>
-                      </div>
-  
-                      <div class="form-group row">
-                        <label for="name" class="col-md-3 col-form-label">Address</label>
-                        <div class="col-md-9">
-                          <textarea name="address" id="address" rows="3" class="form-control"></textarea>
-                        </div>
-                      </div>
-                      <hr>
-                      <div class="form-group row mb-0">
-                        <div class="col-md-9 offset-md-3">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <a href="/" class="btn btn-outline-secondary">Cancel</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+  .form-card {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 22px;
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.1);
+    backdrop-filter: blur(12px);
+    padding: 2rem 2.5rem;
+    position: relative;
+    z-index: 1;
+    transition: 0.3s ease-in-out;
+  }
 
-                </form>
+  .form-card:hover {
+    box-shadow: 0 0 55px rgba(212, 175, 55, 0.2);
+  }
+
+  .form-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.8rem;
+    background: linear-gradient(90deg, #d4af37, #f7ce68);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 2rem;
+  }
+
+  label {
+    color: #f1f1f1;
+    font-weight: 500;
+  }
+
+  .form-control {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: #fff;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #ffd700;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  .btn {
+    border-radius: 50px;
+    font-weight: 500;
+    padding: 10px 25px;
+    transition: 0.3s ease;
+  }
+
+  .btn-glow {
+    background: linear-gradient(90deg, #d4af37, #f7ce68);
+    border: none;
+    color: #1a1a1a;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+  }
+
+  .btn-glow:hover {
+    box-shadow: 0 0 35px rgba(212, 175, 55, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .btn-outline-gold {
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    color: #d4af37;
+  }
+
+  .btn-outline-gold:hover {
+    background: linear-gradient(90deg, #d4af37, #f7ce68);
+    color: #1a1a1a;
+  }
+
+  .form-divider {
+    border-top: 1px solid rgba(212, 175, 55, 0.25);
+    margin: 2rem 0;
+  }
+
+  .fade-in {
+    animation: fadeIn 1.2s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<main class="py-5 fade-in">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+        <div class="form-card">
+          <h2 class="form-title">
+            <i class="fa-solid fa-user-plus me-2"></i> Add New Contact
+          </h2>
+
+          <form action="/contacts/add" method="post">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" name="first_name" id="first_name" class="form-control" required>
+              </div>
+
+              <div class="col-md-6">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" name="last_name" id="last_name" class="form-control" required>
+              </div>
+
+              <div class="col-md-6">
+                <label for="city" class="form-label">City</label>
+                <input type="text" name="city" id="city" class="form-control" required>
+              </div>
+
+              <div class="col-md-6">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="tel" name="phone" id="phone" pattern="[0-9]{10}" class="form-control" required>
+              </div>
+
+              <div class="col-12">
+                <label for="address" class="form-label">Address</label>
+                <textarea name="address" id="address" rows="3" class="form-control"></textarea>
               </div>
             </div>
-          </div>
+
+            <div class="form-divider"></div>
+
+            <div class="d-flex justify-content-end gap-3">
+              <button type="submit" class="btn btn-glow">
+                <i class="fa-solid fa-save me-2"></i> Save Contact
+              </button>
+              <a href="/contacts" class="btn btn-outline-gold">
+                <i class="fa-solid fa-arrow-left me-2"></i> Cancel
+              </a>
+            </div>
+          </form>
         </div>
       </div>
-    </main>
+    </div>
+  </div>
+</main>
 
-<%- include('Partials/header.ejs') %>
+<%- include('Partials/footer.ejs') %>

@@ -1,2 +1,77 @@
+  <!-- 👑 Royal Footer -->
+  <footer class="royal-footer mt-5 py-5 text-center text-white position-relative">
+    <div class="container">
+      <h4 class="fw-semibold mb-2 text-gradient">
+        <i class="fa-solid fa-crown me-2 text-warning"></i>Royal Contact App
+      </h4>
+      <p class="mb-4 text-light opacity-75">
+        Manage your network with elegance — built with ❤️ using <strong>Node.js</strong>, <strong>Express</strong> & <strong>MongoDB</strong>.
+      </p>
+
+      <!-- Social Links -->
+      <div class="mb-4">
+        <a href="https://github.com/Dhruvi2006-source" target="_blank" class="btn btn-outline-light btn-sm rounded-circle mx-2 glow-hover">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="#" target="_blank" class="btn btn-outline-light btn-sm rounded-circle mx-2 glow-hover">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="#" target="_blank" class="btn btn-outline-light btn-sm rounded-circle mx-2 glow-hover">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+
+      <small class="text-light opacity-75">
+        © <%= new Date().getFullYear() %> <span class="fw-semibold text-warning">Dhruvi</span> — All Rights Reserved
+        
+      </small>
+    </div>
+
+    <!-- Subtle glow overlay -->
+    <div class="footer-glow position-absolute top-0 start-0 w-100 h-100"></div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    .royal-footer {
+      background: radial-gradient(circle at top center, rgba(54, 0, 80, 0.9), rgba(10, 0, 25, 1));
+      overflow: hidden;
+      position: relative;
+      border-top: 1px solid rgba(255, 215, 0, 0.3);
+      box-shadow: 0 -4px 20px rgba(255, 215, 0, 0.15);
+    }
+
+    .text-gradient {
+      background: linear-gradient(90deg, #f5c542, #ffdd8f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .glow-hover {
+      border-color: rgba(255, 215, 0, 0.6);
+      transition: all 0.3s ease;
+    }
+
+    .glow-hover:hover {
+      color: #fff !important;
+      background: linear-gradient(90deg, #f5c542, #ffea94);
+      border: none;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    }
+
+    .footer-glow {
+      background: radial-gradient(circle at center, rgba(255, 215, 0, 0.15), transparent 70%);
+      pointer-events: none;
+      animation: pulseGlow 6s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.05); }
+    }
+  </style>
+
 </body>
 </html>

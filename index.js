@@ -1,92 +1,97 @@
-const express = require('express')
+const express = require('express');
+const mongoose = require('mongoose');
+const Contact = require('./Model/Contact');
+
 const app = express();
-const mongoose = require('mongoose')
-const Contact = require('./Model/Contact')
 
-mongoose.connect('mongodb://localhost:27017/contacts-crud').then(()=>console.log("Database is connected"))
+// ------------------ DATABASE ------------------
+mongoose
+  .connect('mongodb://localhost:27017/contact_manager')
+  .then(() => console.log('✅ MongoDB connected successfully'))
+  .catch((err) => console.error('❌ DB connection failed:', err));
 
-//Middle ware
+// ------------------ MIDDLEWARE ------------------
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
-app.set('view engine' , 'ejs')
-app.use(express.urlencoded({extended:false}))
-app.use(express.static('public'))
+// ------------------ ROUTES ------------------
 
-//Routes
-
-app.get('/'  , async(req , res) =>{
-
-   const contact = await Contact.find();
-//    res.json(contact); 
-    // res.send("Home page")
-    res.render('home' , {contact})
-})
-
-app.get('/show_contact/:id' , async (req , res) =>{
-
-    const contact = await Contact.findOne({_id : req.params.id})
-
-    res.render('show_contact' , {contact} )
-})
-
-app.get('/add_contact' ,  (req , res) =>{
-    res.render('add_contact')
-})
-
-// app.post('/add_contact' , async (req , res) =>{
-    
-//     const contact = await Contact.insertOne({
-//         first_name : req.body.first_name,
-//         last_name : req.body.last_name,
-//         city : req.body.city,
-//         phone : req.body.phone,
-//         address : req.body.address
-//     })
-//     res.redirect("/")
-// })
-
-app.post('/add_contact', async (req, res) => {
-  await Contact.create({
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    city: req.body.city,
-    phone: req.body.phone,
-    address: req.body.address
-  });
-  res.redirect("/");
+// 📄 All Contacts
+app.get(['/','/contacts'], async (req, res) => {
+  try {
+    const contacts = await Contact.find().lean();
+    res.render('contacts', { contacts });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching contacts");
+  }
 });
 
+// ➕ Add Contact (GET)
+app.get('/contacts/add', (req, res) => {
+  res.render('add_contact');
+});
 
-app.get('/update_contact/:id' , async (req , res) =>{
+// ➕ Add Contact (POST)
+app.post('/contacts/add', async (req, res) => {
+  try {
+    await Contact.create(req.body);
+    res.redirect('/contacts');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error adding contact');
+  }
+});
 
-    const contact = await Contact.findOne({_id : req.params.id})
+// ✏️ Edit Contact (GET)
+app.get('/contacts/edit/:id', async (req, res) => {
+  try {
+    const contact = await Contact.findById(req.params.id).lean();
+    if (!contact) return res.status(404).send('Contact not found');
+    res.render('update_contact', { contact });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading edit form');
+  }
+});
 
-    res.render('update_contact' , {contact})
-})
+// ✏️ Edit Contact (POST)
+app.post('/contacts/edit/:id', async (req, res) => {
+  try {
+    await Contact.findByIdAndUpdate(req.params.id, req.body);
+    res.redirect('/contacts');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error updating contact');
+  }
+});
 
-app.post('/update_contact' , async (req , res) =>{
-    
-    const contact = await Contact.updateOne({
-        first_name :req.body.first_name,
-        last_name :req.body.last_name,
-        city : req.body.city,
-        phone : req.body.phone,
-        address : req.body.address
-    })
-    res.redirect("/")
+// ❌ Delete Contact
+app.get('/contacts/delete/:id', async (req, res) => {
+  try {
+    await Contact.findByIdAndDelete(req.params.id);
+    res.redirect('/contacts');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error deleting contact');
+  }
+});
 
-    // res.send("Home page")
-})
-app.get('/delete_contact/:id' ,  async (req , res) =>{
+// 👁️ View Single Contact (must come LAST)
+app.get('/contacts/:id', async (req, res) => {
+  try {
+    const contact = await Contact.findById(req.params.id).lean();
+    if (!contact) return res.status(404).send('Contact not found');
+    res.render('show_contact', { contact });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error retrieving contact');
+  }
+});
 
-    await Contact.deleteOne()
-    
-    res.redirect("/")
-
-    // res.render('show_contact')
-})
-
-
-app.listen(3000 , ()=>{
-    console.log("Server is started")
-})
-
+// ------------------ SERVER ------------------
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
