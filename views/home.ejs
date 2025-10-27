@@ -1,0 +1,59 @@
+
+<%- include('Partials/header.ejs') %>
+
+    <!-- content -->
+    <main class="py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-title">
+                  <div class="d-flex align-items-center">
+                    <h2 class="mb-0">All Contacts</h2>
+                    <div class="ml-auto">
+                      <a href="/add_contact" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+                    </div>
+                  </div>
+                </div>
+              <div class="card-body">
+                <table class="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <!-- <th scope="col">Sr.no</th> -->
+                      <th scope="col">First Name</th>
+                      <th scope="col">Last Name</th>
+                      <th scope="col">City</th>
+                      <th scope="col">Phone</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% contact.forEach(contacts =>{%>
+                   
+                       <tr>
+                      <!-- <td>1</td> -->
+                      <td><%= contacts.first_name%></td>
+                      <td><%= contacts.last_name%></td>
+                      <td><%= contacts.city%></td>
+                      <td><%= contacts.phone%></td>
+                      <td width="150">
+                        <a href="/show_contact/<%= contacts._id%>" class="btn btn-sm btn-circle btn-outline-info" title="Show"><i class="fa fa-eye"></i></a>
+                        <a href="/update_contact/<%= contacts._id%>" class="btn btn-sm btn-circle btn-outline-secondary" title="Edit"><i class="fa fa-edit"></i></a>
+                        <a href="/delete_contact/<%= contacts._id%>" class="btn btn-sm btn-circle btn-outline-danger" title="Delete" ><i class="fa fa-times"></i></a>
+                      </td>
+                    </tr>
+                      
+                      <%})
+                     %>
+                   
+                    
+                  </tbody>
+                </table> 
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  
+    <%- include('Partials/footer.ejs') %>
